@@ -1,0 +1,17 @@
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.csproj.AssemblyReference.cache
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.AssemblyInfoInputs.cache
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.AssemblyInfo.cs
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.csproj.CoreCompileInputs.cache
+C:\Users\JaredP\source\repos\Dungeon\bin\Debug\net6.0\Dungeon.exe
+C:\Users\JaredP\source\repos\Dungeon\bin\Debug\net6.0\Dungeon.deps.json
+C:\Users\JaredP\source\repos\Dungeon\bin\Debug\net6.0\Dungeon.runtimeconfig.json
+C:\Users\JaredP\source\repos\Dungeon\bin\Debug\net6.0\Dungeon.dll
+C:\Users\JaredP\source\repos\Dungeon\bin\Debug\net6.0\Dungeon.pdb
+C:\Users\JaredP\source\repos\Dungeon\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.csproj.CopyComplete
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.dll
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\refint\Dungeon.dll
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.pdb
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\Dungeon.genruntimeconfig.cache
+C:\Users\JaredP\source\repos\Dungeon\obj\Debug\net6.0\ref\Dungeon.dll

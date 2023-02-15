@@ -1,0 +1,14 @@
+{
+  "PlayerFile": {
+    "Inventory": {
+      "Gold": 123,
+      "Items": [ "apple" ]
+    },
+    "Stats": {
+      "Health": 100,
+      "Attack": 10,
+      "Defense": 5,
+      "Speed": 8
+    }
+  }
+}
