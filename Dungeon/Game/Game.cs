@@ -25,8 +25,31 @@ public class Game
     public void Start()
     {
         isPlaying = true;
+        ChooseName();
+    }
+
+    public void ChooseName()
+    {
+        while(true)
+        {
+            Console.WriteLine("Type your name");
+            string Name = Console.ReadLine()!;
+            if (Name.Length <= 20 && Name.Length > 0)
+            {
+                Player.Name = Name;
+                break;
+            } 
+            else if (Name.Length > 20 && Name.Length < 1) {
+                Console.WriteLine("Your name can only be from 1-20 characters");
+            }
+            else
+            {
+                Console.WriteLine("Invalid Name");
+            }
+        }
         Main();
     }
+
     public void Main()
     {
         while(isPlaying)

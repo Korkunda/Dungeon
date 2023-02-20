@@ -8,6 +8,7 @@ public class Stats
     public Speed Speed; 
 
 
+
     public Stats(int hp, int atk, int def, int spd)
     {
         Health = new Health(new NonMultiplierStat(hp), new MultiplierStat(hp), "Health");
@@ -30,6 +31,19 @@ public class Stats
 
     public int Heal(int val)
     {
+        int amountHealed;
+
+        //calc amount healed
+        if(Health.Stat.Value + val >= Health.BaseStat.Value)
+        {
+            amountHealed = Health.BaseStat.Value - Health.Stat.Value;
+        }
+        else
+        {
+            amountHealed = val;
+        }
+
+        // do healing
         if (Health.Stat.Value + val >= Health.BaseStat.Value)
         {
             Health.Stat.Value = Health.BaseStat.Value;
@@ -39,12 +53,8 @@ public class Stats
             Health.Stat.Value += val;
         }
 
-        if(Health.Stat.Value + val >= Health.BaseStat.Value)
-        {
-            return Health.BaseStat.Value - Health.Stat.Value;
-        }
 
-        return val;
+        return amountHealed;
     }
 
     public void ClearStats()

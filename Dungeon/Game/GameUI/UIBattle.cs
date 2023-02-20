@@ -21,6 +21,7 @@ namespace Dungeon.UserInterface
             int number = rnd.Next(1, moveset.GetMovesetSize());
             int moveIndex = number - 1;
             return moveIndex;
+            
         }
         public int InputMove(Moveset moveset)
         {

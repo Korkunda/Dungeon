@@ -3,8 +3,12 @@ using Dungeon.UserInterface;
 
 namespace Dungeon.Battling;
 
-public class BurnEffect : EndOfTurnEffect, IStatusEffect
+public class BurnEffect : IStatusEffect, IEndOfTurnEffect, IImmediateEffect
 {
+    public bool AffectsSelf { get; set; }
+    public bool AffectsOpponent { get; set; }
+    public int TurnsLeftOfEffect { get; set; }
+
     public BurnEffect(bool affectsSelf, bool affectsOpponent)
     {
         TurnsLeftOfEffect = -1;
@@ -12,28 +16,44 @@ public class BurnEffect : EndOfTurnEffect, IStatusEffect
         AffectsOpponent = affectsOpponent;
     }
 
-    public override bool UseImmediateEffect(Character character, UIBattle uiBattle, string moveType)
+    public bool UseImmediateEffect(BattleChar character, UIBattle uiBattle, string moveType)
     {
-        bool effectWorked = character.BattleState!.Effects.AddEffects(this);
+        bool alreadyStatused = character.Character.BattleState!.Effects.EffectList.Any(e => e is IStatusEffect);
 
-        if (effectWorked)
+        if(!alreadyStatused)
         {
-            uiBattle.Messages.EffectMsg(character.Name, "was burned!");
-        }
-        else if(!effectWorked && moveType != Enum.GetName((Categories)0))
-        {
-            uiBattle.Messages.EffectMsg(character.Name, "is already burnt!");
-        }
-        bool alreadyStatused = character.BattleState.Effects.EffectList.Any(e => e is IStatusEffect);
+            bool effectWorked = character.Character.BattleState!.Effects.AddEffects(this);
 
-        return effectWorked;
+            if (effectWorked)
+            {
+                uiBattle.Messages.EffectMsg(character.Character.Name, "was burned!");
+            }
+            else if(!effectWorked && moveType != Enum.GetName((Categories)0))
+            {
+                uiBattle.Messages.EffectMsg(character.Character.Name, "is already burnt!");
+            }
+
+            return effectWorked;
+        }
+
+        return false;
     }
 
-    public override void UseEndOfTurnEffect(Character character, UIBattle uiBattle, string moveType)
+    public void UseEndOfTurnEffect(BattleChar character, UIBattle uiBattle, string moveType)
     {
-        int dmg = Convert.ToInt32(character.Stats.Health.BaseStat.Value * 0.08);
-        character.Stats.TakeDamage(dmg);
-        uiBattle.Messages.EffectMsg(character.Name, "is hurt by its burn.");
+        int dmg = Convert.ToInt32(character.Character.Stats.Health.BaseStat.Value * 0.08);
+        character.Character.Stats.TakeDamage(dmg);
+        uiBattle.Messages.EffectMsg(character.Character.Name, "is hurt by its burn.");
+    }
+
+    public int UseDamagePhaseEffect(BattleChar character, UIBattle uiBattle, Move moveUsed)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DecrementTurnsLeft()
+    {
+        throw new NotImplementedException();
     }
 }
 

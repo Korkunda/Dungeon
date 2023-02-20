@@ -55,5 +55,10 @@ namespace Dungeon.UserInterface
             Console.WriteLine($"{charName}'s {statName} cannot go any lower!");
         }
 
+        public void EffectEnded(string charName, string effectName)
+        {
+            Console.WriteLine($"{charName}'s {effectName} ended.");
+        }
+
     }
 }

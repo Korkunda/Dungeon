@@ -62,6 +62,7 @@ public class Battle
     {
         Move playerMove = SelectMove(player.Moveset);
         Move cpuMove = SelectMoveCPU(mob.Moveset);
+
         List<Move> selections = new List<Move>() { playerMove, cpuMove };
         return selections;
     }
@@ -96,17 +97,21 @@ public class Battle
     {
         if (player.Stats.isAlive() && !mob.Stats.isAlive())
         {           
-            Console.WriteLine("You won");
+            Console.WriteLine($"{mob.Name} has fainted. \nYou won!");
         }
         else if(mob.Stats.isAlive() && !player.Stats.isAlive())
         {
-            Console.WriteLine("You lost");
+            Console.WriteLine($"You fainted \nYou lost...");
         }
         else
         {
-            Console.WriteLine("Draw");
+            Console.WriteLine($"Both you and {mob.Name} fainted. \nIt's a Draw");
         }
 
-        Player.Stats.ResetStats();
+        //Player.Stats.ResetStats();
+        //for(int i = 0; i < Player.Moveset.Moves.Count; i++)
+        //{
+        //    Player.Moveset.Moves[i].Effects.ResetTurns();
+        //}
     }
 }

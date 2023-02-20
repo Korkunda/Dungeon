@@ -19,7 +19,7 @@ public class GameState
     {
         Stats Stats = new Stats(100, 50, 50, 50);
         Inventory Inventory = new Inventory(0, ItemGenerator.CreateItem(0));
-        Moveset Moveset = new Moveset(new List<int>() { 1, 14, 3, 12,9,13 });
+        Moveset Moveset = new Moveset(new List<int>() { 1, 14, 3, 12, 9, 13, 17 });
 
         Player.Stats = Stats;
         Player.Inventory = Inventory;

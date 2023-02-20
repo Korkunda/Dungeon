@@ -8,7 +8,8 @@ public interface IEffect
     bool AffectsSelf { get; set; }
     bool AffectsOpponent { get; set; }
 
-    bool UseImmediateEffect(Character character, UIBattle uiBattle,string moveType);
+    public int TurnsLeftOfEffect { get; set; }
 
-    void UseEndOfTurnEffect(Character character, UIBattle uIBattle,string moveType);
+    void DecrementTurnsLeft();
+
 }

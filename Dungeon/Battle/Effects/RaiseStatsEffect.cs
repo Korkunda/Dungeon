@@ -3,12 +3,14 @@ using Dungeon.UserInterface;
 
 namespace Dungeon.Battling;
 
-public class RaiseStats : IEffect
+public class RaiseStats : IEffect, IImmediateEffect
 {
     public bool AffectsSelf { get; set; }
     public bool AffectsOpponent { get; set; }
     public string StatName { get; set; }
     public int Stage { get; set; }
+    public int TurnsLeftOfEffect { get; set; }
+
     public RaiseStats(bool affectsSelf, bool affectsOpponent, string stat, int stage)
     {
         AffectsSelf = affectsSelf;
@@ -17,22 +19,18 @@ public class RaiseStats : IEffect
         Stage = stage;
     }
 
-    public void UseEndOfTurnEffect(Character user, UIBattle uiBattle, string moveType)
-    {
-    }
-
-    public bool UseImmediateEffect(Character character, UIBattle uiBattle, string moveType)
+    public bool UseImmediateEffect(BattleChar character, UIBattle uiBattle, string moveType)
     {
         switch (StatName.ToLower())
         {
             case "attack":
-                validateStat(character, character.Stats.Attack, uiBattle);
+                validateStat(character.Character, character.Character.Stats.Attack, uiBattle);
                 break;
             case "defense":
-                validateStat(character, character.Stats.Defense, uiBattle);
+                validateStat(character.Character, character.Character.Stats.Defense, uiBattle);
                 break;
             case "speed":
-                validateStat(character, character.Stats.Speed, uiBattle);
+                validateStat(character.Character, character.Character.Stats.Speed, uiBattle);
                 break;
         }
 
@@ -54,5 +52,10 @@ public class RaiseStats : IEffect
         }
 
         character.Stats.RaiseLowerStats(stat, Stage);
+    }
+
+    public void DecrementTurnsLeft()
+    {
+        throw new NotImplementedException();
     }
 } 

@@ -6,20 +6,21 @@ namespace Dungeon.Battling;
 
 public class BattleEngine
 {
-	Player Player { get; set; }	
-	Mob Mob { get; set; }
+	BattleChar Player { get; set; }	
+	BattleChar Mob { get; set; }
+
 	UIBattle UIBattle { get; set; }
 
-	public BattleEngine(Player player, Mob player2, UIBattle uiBattle)
+	public BattleEngine(Player player1, Mob player2, UIBattle uiBattle)
 	{
-		Player = player;
-		Mob = player2;
+		Player = new BattleChar(player1);
+		Mob = new BattleChar(player2);
 		UIBattle = uiBattle;
 	}
 
 	public void Calc(Move playerMove, Move mobMove)
 	{
-		int startingPlayer = SpeedCalc(Player.Stats.Speed.Stat.Value, Mob.Stats.Speed.Stat.Value);
+		int startingPlayer = SpeedCalc(Player.Character.Stats.Speed.Stat.Value, Mob.Character.Stats.Speed.Stat.Value);
 
 		switch (startingPlayer)
 		{
@@ -35,15 +36,16 @@ public class BattleEngine
                 MoveOrder(2, playerMove, mobMove);
                 break;
 		}
-		if(Player.Stats.isAlive() && Mob.Stats.isAlive())
+		if(Player.Character.Stats.isAlive() && Mob.Character.Stats.isAlive())
 		{
 			EndOfTurnEffects(Player, playerMove, Mob, mobMove);
+			RemoveAllExpiredEffects(Player.Character, Mob.Character);
 		}
-        
-
     }
 
-	void MoveOrder(int playerNo, Move p1Move, Move p2Move)
+
+
+    void MoveOrder(int playerNo, Move p1Move, Move p2Move)
 	{
 		if (playerNo == 1)
 		{
@@ -58,6 +60,7 @@ public class BattleEngine
 
     int SpeedCalc(int p1Speed, int p2Speed)
 	{
+
 		if(p1Speed>p2Speed)
 		{
 			return 1;
@@ -72,9 +75,9 @@ public class BattleEngine
 		}
 	}
 
-	void MoveCalc(Character attacker, Character defender, Move move)
+	void MoveCalc(BattleChar attacker, BattleChar defender, Move move)
 	{
-		bool attackerIsAlive = attacker.Stats.isAlive();
+		bool attackerIsAlive = attacker.Character.Stats.isAlive();
 		if(!attackerIsAlive)
 		{
 
@@ -87,21 +90,21 @@ public class BattleEngine
 			{
 				case "damage":
 					DamagingMove(attacker, defender, move);
-                    if (Player.Stats.isAlive() && Mob.Stats.isAlive())
+                    if (Player.Character.Stats.isAlive() && Mob.Character.Stats.isAlive())
                     {
 						RunImmediateEffects(attacker,defender,move,	moveType);
                     }
 					break;
 				case "heal":
 					HealingMove(attacker, move);
-                    if (Player.Stats.isAlive() && Mob.Stats.isAlive())
+                    if (Player.Character.Stats.isAlive() && Mob.Character.Stats.isAlive())
                     {
                         RunImmediateEffects(attacker, defender, move, moveType);
                     }
                     break;
 				case "effect":
                     EffectMove(attacker, defender, move);
-                    if (Player.Stats.isAlive() && Mob.Stats.isAlive())
+                    if (Player.Character.Stats.isAlive() && Mob.Character.Stats.isAlive())
                     {
                         RunImmediateEffects(attacker, defender, move, moveType);
                     }
@@ -112,15 +115,25 @@ public class BattleEngine
 		}
     }
 
-	void EndOfTurnEffects(Character p1, Move p1Move, Character p2, Move p2Move)
+	void EndOfTurnEffects(BattleChar p1, Move p1Move, BattleChar p2, Move p2Move)
 	{
 		RunEndOfTurnEffects(p1, Enum.GetName((Categories)p1Move.Category)!);
 		RunEndOfTurnEffects(p2, Enum.GetName((Categories)p2Move.Category)!);
 	}
 
-	public void RunImmediateEffects(Character attacker, Character defender, Move move, string type)
+	public void RunImmediateEffects(BattleChar attacker, BattleChar defender, Move move, string type)
 	{
+		List<IImmediateEffect> ImmediateEffects = new List<IImmediateEffect>();
+
 		foreach(IEffect effect in move.Effects)
+		{
+			if(effect is IImmediateEffect)
+			{
+				ImmediateEffects.Add((IImmediateEffect)effect);
+			}
+        }
+
+		foreach(IImmediateEffect effect in ImmediateEffects)
 		{
 			if(effect.AffectsSelf)
 			{
@@ -128,51 +141,75 @@ public class BattleEngine
 			}
 			if(effect.AffectsOpponent)
 			{
-               effect.UseImmediateEffect(defender, UIBattle, type);
+				effect.UseImmediateEffect(defender, UIBattle, type);
 			}
 		}
     }
 
 
-
-    public void RunEndOfTurnEffects(Character character, string type)
+    public void RunEndOfTurnEffects(BattleChar character, string type)
     {
-        foreach (IEffect effect in character.BattleState!.Effects.EffectList)
+
+        List<IEndOfTurnEffect> EndOfTurnEffects = new List<IEndOfTurnEffect>();
+
+        foreach (IEffect effect in character.Character.BattleState!.Effects.EffectList)
+        {
+            if (effect is IEndOfTurnEffect)
+            {
+                EndOfTurnEffects.Add((IEndOfTurnEffect)effect);
+            }
+        }
+
+        foreach (IEndOfTurnEffect effect in EndOfTurnEffects)
         {
 			effect.UseEndOfTurnEffect(character, UIBattle, type);
 		}
     }
+    private void RemoveAllExpiredEffects(Character p1, Character p2)
+    {
+		p1.BattleState!.Effects.RemoveExpiredEffects();
+		p2.BattleState!.Effects.RemoveExpiredEffects();
+    }
 
-    void DamagingMove(Character attacker, Character defender, Move move)
+
+    void DamagingMove(BattleChar attacker, BattleChar defender, Move move)
 	{
 		int dmg = DmgCalc(attacker, defender, move);
-        UIBattle.Messages.UsedMove(attacker, move);
+        UIBattle.Messages.UsedMove(attacker.Character, move);
 		UIBattle.Messages.DmgDealt(dmg);
-        defender.Stats.TakeDamage(dmg);
+        defender.Character.Stats.TakeDamage(dmg);
 	}
 
-	void EffectMove(Character attacker, Character defender, Move move)
+	void EffectMove(BattleChar attacker, BattleChar defender, Move move)
 	{
-        UIBattle.Messages.UsedMove(attacker, move);
+        UIBattle.Messages.UsedMove(attacker.Character, move);
     }
 
 
 
-    int DmgCalc(Character attacker, Character defender, Move move)
+    int DmgCalc(BattleChar attacker, BattleChar defender, Move move)
 	{
+
 		Random rnd = new Random();
 		int rng = rnd.Next(95, 105);
 
-        int dmg = attacker.Stats.Attack.Stat.Value * move.Damage / defender.Stats.Defense.Stat.Value / 2 * rng/100;
+		int defense = defender.Defense;
 
-		return dmg;
+        int rawDmg = attacker.Attack * move.Damage / defender.Defense / 2 * rng/100;
+
+
+
+
+
+		return rawDmg;
     }
 
-    void HealingMove(Character user, Move move)
+
+    void HealingMove(BattleChar user, Move move)
     {
-        int heal = HealCalc(user, move);
-        UIBattle.Messages.UsedMove(user, move);
-        int amountHealed = user.Stats.Heal(heal);
+        int heal = HealCalc(user.Character, move);
+        UIBattle.Messages.UsedMove(user.Character, move);
+        int amountHealed = user.Character.Stats.Heal(heal);
         UIBattle.Messages.AmountHealed(amountHealed);
     }
 

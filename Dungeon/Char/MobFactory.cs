@@ -14,11 +14,15 @@ namespace Dungeon.Char
                 case 0:
                     return GenerateMobObj("Cow", 200, 30, 60, 10, 0, 1, new List<int>() { 1, 2 });
                 case 1:
-                    return GenerateMobObj("Dog", 50, 70, 20, 110, 0, 0, new List<int>() { 0 });
+                    return GenerateMobObj("Dog", 60, 70, 40, 110, 0, 0, new List<int>() { 0 });
                 case 2:
                     return GenerateMobObj("Spiky", 50, 40, 200, 5, 0, 2, new List<int>() { 1 });
                 case 3:
                     return GenerateMobObj("Blue-Eyed Lizard", 90, 75, 40, 95, 0, 0, new List<int>() { 1, 2, 7, 8 });
+                case 4:
+                    return GenerateMobObj("Skeleton", 100, 50, 50, 50, 0, 0, new List<int>() { 3, 4, 10, 5 });
+                case 5:
+                    return GenerateMobObj("Punching Bag", 500, 0, 50, 0, 0, 0, new List<int>() { 19 });
             }
         }
         public static Mob CreateRandomMob()

@@ -39,5 +39,19 @@ namespace Dungeon.Char
                 return false;
             }
         }
+
+        public void RemoveExpiredEffects()
+        {
+
+            foreach (var effect in EffectList.ToList())
+            {
+                if (effect.TurnsLeftOfEffect == 0)
+                {
+                    EffectList.Remove(effect);
+                }
+            }
+
+
+        }
     }
 }

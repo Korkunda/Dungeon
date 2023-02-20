@@ -37,7 +37,9 @@ public class Moveset
 
     public Move GetMoveByIndex(int index)
     {
-        return Moves[index];
+        Move m = Moves[index];
+        Move moveToReturn = new Move(m.Name, m.Damage, m.Type, m.Category, m.Effects);
+        return moveToReturn;
     }
 
     public int GetMovesetSize()
